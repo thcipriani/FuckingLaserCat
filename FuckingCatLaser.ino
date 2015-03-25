@@ -1,9 +1,9 @@
 /**
- * Fucking Cat Laser
- * ===
- * Short code snippet to control an arduino and a laser for Reese the Cat's
- * entertainment. She must be entertained.
+ * == Fucking Cat Laser ==
  *
+ *  This is a short chunk of code to entertain the fucking cat.
+ *
+ *  Copyright (C) 2015 Tyler Cipriani
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
