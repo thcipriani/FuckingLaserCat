@@ -1,9 +1,9 @@
 /**
- * == Fucking Cat Laser ==
+ * Fucking Cat Laser
+ * ===
+ * Short code snippet to control an arduino and a laser for Reese the Cat's
+ * entertainment. She must be entertained.
  *
- *  This is a short chunk of code to entertain the fucking cat.
- *
- *  Copyright (C) 2015 Tyler Cipriani
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
@@ -32,9 +32,6 @@ int pirPin = 12;
 int servoXPos = 0;
 int servoYPos = 0;
 
-int servoXOldPos;
-int servoYOldPos;
-
 boolean lock = false;
 
 void setup()
@@ -47,11 +44,21 @@ void setup()
 
   pinMode(laserPin, OUTPUT);
   pinMode(pirPin, INPUT);
+
+  // Debug
+  // Serial.begin(9600);
 }
 
-void incrimentPos(int oldPos, int newPos, Servo &serv)
+void incrimentPos(int newPos, Servo &serv)
 {
-  int i = oldPos;
+  int i = serv.read();
+
+  // Serial.print("Current: ");
+  // Serial.println(i);
+
+  // Serial.print("New: ");
+  // Serial.println(newPos);
+  // Serial.println("------------------");
 
   // Jackpot
   int rand = random(0, 100);
@@ -81,13 +88,11 @@ void catShow()
   digitalWrite(laserPin, HIGH);
 
   while(i < 100) {
-    servoXOldPos = servoXPos;
-    servoYOldPos = servoYPos;
     servoXPos = random(0, 35);
     servoYPos = random(0, 35);
 
-    incrimentPos(servoYOldPos, servoYPos, servoY);
-    incrimentPos(servoXOldPos, servoXPos, servoX);
+    incrimentPos(servoYPos, servoY);
+    incrimentPos(servoXPos, servoX);
     delay(random(15, 2000));
     i += 1;
   }
@@ -100,19 +105,14 @@ void catShow()
   lock = false;
 }
 
-void doCatShow()
+void loop()
 {
   if (lock) {
     return;
   }
 
-  catShow();
-}
-
-void loop()
-{
   if (digitalRead(pirPin) == HIGH) {
-    doCatShow();
+    catShow();
   }
 }
 
