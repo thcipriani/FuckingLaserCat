@@ -46,37 +46,49 @@ void setup()
   pinMode(pirPin, INPUT);
 
   // Debug
-  // Serial.begin(9600);
+  Serial.begin(9600);
 }
 
-void incrimentPos(int newPos, Servo &serv)
+void incrimentPos(int newPos, Servo &serv, int newPos2, Servo &serv2)
 {
   int i = serv.read();
+  int j = serv2.read();
+  int k = 0;
 
-  // Serial.print("Current: ");
-  // Serial.println(i);
+  int deltaPos = 0;
+  int wait = 15;
 
-  // Serial.print("New: ");
-  // Serial.println(newPos);
-  // Serial.println("------------------");
-
-  // Jackpot
-  int rand = random(0, 100);
-  if (rand % 5 == 0) {
-    serv.write(newPos);
-    return;
+  if (i < newPos) {
+    deltaPos = newPos - i;
+  } else {
+    deltaPos = i - newPos;
   }
 
-  while (i < newPos) {
-    i += 1;
-    serv.write(i);
-    delay(random(1, 60));
+  if (j < newPos2) {
+    deltaPos += newPos2 - j;
+  } else {
+    deltaPos += j - newPos2;
   }
 
-  while (i > newPos) {
-    i -= 1;
+  if (deltaPos > 50)
+    wait = 50;
+
+  while (k < deltaPos) {
+    if (i < newPos)
+      i += 1;
+    else
+      i -= 1;
+
+
+    if (j < newPos2)
+      j += 1;
+    else
+      j -= 1;
+
     serv.write(i);
-    delay(random(1, 60));
+    serv2.write(j);
+    delay(wait);
+    k += 1;
   }
 }
 
@@ -84,16 +96,23 @@ void catShow()
 {
   lock = true;
   int i = 0;
+  int wait;
+  int jackpot = 2000;
 
   digitalWrite(laserPin, HIGH);
 
-  while(i < 100) {
-    servoXPos = random(0, 35);
-    servoYPos = random(0, 35);
 
-    incrimentPos(servoYPos, servoY);
-    incrimentPos(servoXPos, servoX);
-    delay(random(15, 2000));
+  while(i < 100) {
+    wait = random(0, 100);
+
+    if (wait % 7 == 0)
+      wait = jackpot;
+
+    servoXPos = random(0, 50);
+    servoYPos = random(0, 20);
+
+    incrimentPos(servoYPos, servoY, servoXPos, servoX);
+    delay(random(wait));
     i += 1;
   }
 
